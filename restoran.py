@@ -715,11 +715,13 @@ def admin_panel():
 
 
 @app.route("/api/system-status", methods=["GET"])
+@limiter.exempt
 def get_system_status():
     return jsonify({"active": SYSTEM_ACTIVE})
 
 
 @app.route("/api/orders", methods=["GET"])
+@limiter.exempt
 def get_orders():
     return jsonify(ORDERS)
 
