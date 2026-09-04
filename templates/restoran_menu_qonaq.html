@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>QRENKI - Premium Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        html, body {
+            background: #08080a; 
+            color: #f1f1f5; 
+            min-height: 100dvh;
+            width: 100%;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: #111114;
+            min-height: 100dvh;
+            padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px 0;
+                background: radial-gradient(circle at top, #1a150e 0%, #050507 100%);
+            }
+            .app-container {
+                border-radius: 28px;
+                min-height: 90vh;
+                max-height: 92vh;
+                overflow-y: auto;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                scrollbar-width: none;
+            }
+            .app-container::-webkit-scrollbar { display: none; }
+        }
+
+        .sticky-top-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            background: rgba(17, 17, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 4px;
+            padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        .brand-header {
+            padding: 14px 20px 6px 20px;
+            text-align: center;
+        }
+
+        .lang-switch {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .lang-btn {
+            background: #18181c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #8e8e93;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn.active {
+            background: #ffc107;
+            color: #000;
+            border-color: #ffc107;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.25);
+        }
+
+        .brand-title {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .table-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .content-padding { padding: 12px 16px 0 16px; }
+
+        .call-buttons-wrapper {
+            display: flex;
+            gap: 10px;
+            padding: 0 16px;
+            margin: 10px 0 8px 0;
+        }
+
+        .btn-call {
+            flex: 1;
+            background: #18181c;
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .btn-bill {
+            color: #20e070;
+            border-color: rgba(32, 224, 112, 0.3);
+        }
+
+        .search-wrapper { 
+            padding: 0 16px; 
+            margin-bottom: 8px; 
+            position: relative; 
+        }
+        .search-input {
+            width: 100%;
+            background: #18181c;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .categories-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 6px 16px 8px 16px;
+            scrollbar-width: none;
+        }
+        .categories-bar::-webkit-scrollbar { display: none; }
+        .cat-btn {
+            background: #18181c;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8e8e93;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .cat-btn.active {
+            background: #ffc107;
+            color: #000;
+            font-weight: 700;
+            border-color: #ffc107;
+        }
+
+        .category-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffc107;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            scroll-margin-top: 260px;
+        }
+        .category-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,193,7,0.3) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .menu-item {
+            background: linear-gradient(145deg, #16161a 0%, #121215 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-info h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .option-group { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+        .option-row { display: flex; align-items: center; gap: 10px; }
+        .option-label { font-size: 12px; color: #8a8a93; font-weight: 600; }
+        
+        .item-price {
+            font-weight: 800;
+            color: #20e070;
+            font-size: 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            background: #0a0a0c;
+            border-radius: 12px;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-qty {
+            background: #1f1f24;
+            color: #ffc107;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 99px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-num {
+            font-weight: 700;
+            padding: 0 10px;
+            font-size: 14px;
+            color: #fff;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* SƏBƏT PANELİ BÜTÜN EKRANLARDA HƏMİŞƏ ƏN AŞAĞIDA YAPISHIR */
+        .cart-bar-wrapper {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            z-index: 9999999 !important;
+            display: flex;
+            justify-content: center;
+            background: #121216;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: env(safe-area-inset-bottom, 12px);
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.9);
+        }
+
+        .cart-bar {
+            width: 100%;
+            max-width: 480px;
+            background: transparent;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-summary { font-size: 13px; color: #a0a0ab; }
+        .cart-summary strong { color: #20e070; font-size: 18px; font-weight: 800; }
+
+        .btn-send {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+            color: #000;
+            border: none;
+            padding: 12px 22px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .modal { display: none; position: fixed; z-index: 10000000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .modal-content { 
+            background: #16161a; 
+            color: #fff; 
+            margin: 15% auto; 
+            padding: 24px; 
+            border-radius: 24px; 
+            width: 88%; 
+            max-width: 400px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
+        textarea#orderNote { background: #0a0a0c; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+
+        .order-status-bar {
+            position: fixed;
+            bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 450px;
+            background: rgba(22, 22, 28, 0.95);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 16px;
+            padding: 12px 18px;
+            z-index: 9999998;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="scrollContainer">
+    <div class="sticky-top-wrapper">
+        <div class="brand-header">
+            <div class="lang-switch">
+                <button class="lang-btn" id="lang-az" onclick="setLanguage('az')">AZ</button>
+                <button class="lang-btn" id="lang-ru" onclick="setLanguage('ru')">RU</button>
+                <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">EN</button>
+            </div>
+            <div class="brand-title">QRENKİ</div>
+            <div class="table-badge"><span id="lblTable">📍 Masa №</span><strong>{{ table_number }}</strong></div>
+        </div>
+
+        <div class="call-buttons-wrapper">
+            <button class="btn-call" id="btnCallWaiter" onclick="callWaiter('waiter')">🔔 Ofisiantı Çağır</button>
+            <button class="btn-call btn-bill" id="btnGetBill" onclick="callWaiter('bill')">💳 Hesab İstə</button>
+        </div>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Menyu üzrə axtarış..." onkeyup="filterMenu()">
+        </div>
+
+        <div class="categories-bar" id="categoriesBar">
+            {% for category_key, items in menu.items() %}
+                {% set first_item = items[0] if items else {} %}
+                {% set c_az = first_item.category_translated.az if (first_item.category_translated and first_item.category_translated.az) else category_key %}
+                {% set c_ru = first_item.category_translated.ru if (first_item.category_translated and first_item.category_translated.ru) else category_key %}
+                {% set c_en = first_item.category_translated.en if (first_item.category_translated and first_item.category_translated.en) else category_key %}
+
+                <button class="cat-btn {% if loop.first %}active{% endif %}" 
+                        data-cat-id="cat-{{ loop.index }}" 
+                        data-cat-az="{{ c_az }}"
+                        data-cat-ru="{{ c_ru }}"
+                        data-cat-en="{{ c_en }}"
+                        onclick="scrollToCategory('cat-{{ loop.index }}')">
+                    {{ c_az }}
+                </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="content-padding">
+        <div id="menuContainer">
+        {% for category_key, items in menu.items() %}
+            {% set first_item = items[0] if items else {} %}
+            {% set c_az = first_item.category_translated.az if (first_item.category_translated and first_item.category_translated.az) else category_key %}
+            {% set c_ru = first_item.category_translated.ru if (first_item.category_translated and first_item.category_translated.ru) else category_key %}
+            {% set c_en = first_item.category_translated.en if (first_item.category_translated and first_item.category_translated.en) else category_key %}
+
+            <div class="category-block">
+                <div class="category-title" 
+                     id="cat-{{ loop.index }}"
+                     data-title-az="{{ c_az }}"
+                     data-title-ru="{{ c_ru }}"
+                     data-title-en="{{ c_en }}">
+                    {{ c_az }}
+                </div>
+
+                {% for item in items %}
+                    <div class="menu-item" 
+                         data-name-az="{{ (item.adı.az if item.adı is mapping else item.adı)|lower }}"
+                         data-name-ru="{{ (item.adı.ru if item.adı is mapping else item.adı)|lower }}"
+                         data-name-en="{{ (item.adı.en if item.adı is mapping else item.adı)|lower }}">
+                        
+                        <div class="item-info">
+                            <h4 class="item-title-text"
+                                data-az="{{ item.adı.az if item.adı is mapping else item.adı }}"
+                                data-ru="{{ item.adı.ru if item.adı is mapping else item.adı }}"
+                                data-en="{{ item.adı.en if item.adı is mapping else item.adı }}">
+                                {{ item.adı.az if item.adı is mapping else item.adı }}
+                            </h4>
+                        </div>
+                        <div class="option-group">
+                        {% if item.options %}
+                            {% for opt in item.options %}
+                                {% set opt_key = "item-" ~ item.id ~ "-" ~ loop.index %}
+                                <div class="option-row">
+                                    <span class="option-label"
+                                          data-az="{{ opt.label.az if opt.label is mapping else opt.label }}"
+                                          data-ru="{{ opt.label.ru if opt.label is mapping else opt.label }}"
+                                          data-en="{{ opt.label.en if opt.label is mapping else opt.label }}">
+                                        {{ opt.label.az if opt.label is mapping else opt.label }}
+                                    </span>
+                                    <span class="item-price">{{ "%.2f"|format(opt.qiymət) }} ₼</span>
+                                    <div class="quantity-control">
+                                        <button class="btn-qty" onclick="changeQuantityOption('{{ opt_key }}', '{{ item.id }}', {{ loop.index0 }}, {{ opt.qiymət }}, -1)">-</button>
+                                        <span class="qty-num" id="qty-{{ opt_key }}">0</span>
+                                        <button class="btn-qty" onclick="changeQuantityOption('{{ opt_key }}', '{{ item.id }}', {{ loop.index0 }}, {{ opt.qiymət }}, 1)">+</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% set opt_key = "item-" ~ item.id %}
+                            <div class="option-row">
+                                <span class="item-price">{{ "%.2f"|format(item.qiymət) }} ₼</span>
+                                <div class="quantity-control">
+                                    <button class="btn-qty" onclick="changeQuantitySimple('{{ opt_key }}', '{{ item.id }}', {{ item.qiymət }}, -1)">-</button>
+                                    <span class="qty-num" id="qty-{{ opt_key }}">0</span>
+                                    <button class="btn-qty" onclick="changeQuantitySimple('{{ opt_key }}', '{{ item.id }}', {{ item.qiymət }}, 1)">+</button>
+                                </div>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+    <!-- Live Order Status Bar -->
+    <div id="liveStatusBar" class="order-status-bar">
+        <div class="status-info-box">
+            <span class="status-title"><span id="lblOrderNo">Sifariş №</span><span id="activeOrderId">0</span> <span id="lblStatus">Statusu:</span></span>
+            <span class="status-text" id="activeOrderStatus">Hazırlanır 🍳</span>
+        </div>
+        <button class="status-close-btn" id="btnStatusClose" onclick="hideStatusBar()">Gözlədilir</button>
+    </div>
+</div>
+
+<!-- SƏBƏT PANELİ -->
+<div class="cart-bar-wrapper">
+    <div class="cart-bar">
+        <div class="cart-summary">
+            <span id="lblAmount">Məbləğ:</span> <br><strong id="total-price">0.00 ₼</strong> (<span id="cart-count">0</span> <span id="lblItems">məhsul</span>)
+        </div>
+        <button class="btn-send" id="btnCartOpen" onclick="openCart()">Səbətə Bax 🛒</button>
+    </div>
+</div>
+
+<!-- SƏBƏT MODALI -->
+<div id="cartModal" class="modal">
+    <div class="modal-content">
+        <h3 id="lblCartTitle" style="margin-top:0; color:#ffc107; font-size:18px;">🛒 Səbətiniz</h3>
+        <div id="cart-items-list" style="margin-top:15px;"></div>
+        
+        <div style="margin-top: 15px;">
+            <label id="lblNote" style="font-weight: 600; font-size: 12px; color: #8e8e93; display: block; margin-bottom: 6px;">📝 Mətbəx üçün qeyd:</label>
+            <textarea id="orderNote" rows="2" style="width: 100%; border-radius: 12px; padding: 10px; font-size: 13px; box-sizing: border-box; resize: none;" placeholder="Məsələn: Pivə soyuq olsun, buzlu stəkan verin"></textarea>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 16px 0;">
+        <div style="display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 16px;">
+            <span id="lblTotal">Yekun Məbləğ:</span>
+            <span style="color:#20e070;"><span id="modal-total-price">0.00</span> ₼</span>
+        </div>
+        <button class="btn-send" id="btnConfirm" style="width: 100%; padding: 14px;" onclick="confirmOrder()">Sifarişi Təsdiqlə 🚀</button>
+        <button id="btnCloseCart" onclick="closeCart()" style="width: 100%; margin-top: 10px; padding: 12px; border: none; background: #242429; color: #8e8e93; border-radius: 12px; font-weight: 700; cursor:pointer;">Bağla</button>
+    </div>
+</div>
+
+<script>
+    const MENU_DATA = {{ menu|tojson|safe }};
+
+    const translations = {
+        az: {
+            table: "📍 Masa №",
+            callWaiterBtn: "🔔 Ofisiantı Çağır",
+            getBillBtn: "💳 Hesab İstə",
+            searchPlaceholder: "🔍 Menyu üzrə axtarış...",
+            amount: "Məbləğ:",
+            itemsCount: "məhsul",
+            viewCart: "Səbətə Bax 🛒",
+            cartTitle: "🛒 Səbətiniz",
+            noteLabel: "📝 Mətbəx üçün qeyd:",
+            notePlaceholder: "Məsələn: Pivə soyuq olsun, buzlu stəkan verin",
+            totalAmount: "Yekun Məbləğ:",
+            confirmOrder: "Sifarişi Təsdiqlə 🚀",
+            close: "Bağla",
+            orderNo: "Sifariş №",
+            statusLabel: "Statusu:",
+            pending: "Gözlədilir",
+            emptyCartAlert: "Səbətiniz boşdur!",
+            callConfirmWaiter: "Ofisiant Çağırılır 🔔 - Təsdiqləyirsiniz?",
+            callConfirmBill: "Hesab İstənilir 💳 - Təsdiqləyirsiniz?",
+            waiterActionText: "Ofisiant Çağırılır 🔔",
+            billActionText: "Hesab İstənilir 💳",
+            errAlert: "Xəta baş verdi."
+        },
+        ru: {
+            table: "📍 Стол №",
+            callWaiterBtn: "🔔 Вызвать официанта",
+            getBillBtn: "💳 Запросить счет",
+            searchPlaceholder: "🔍 Поиск по меню...",
+            amount: "Сумма:",
+            itemsCount: "тов.",
+            viewCart: "Корзина 🛒",
+            cartTitle: "🛒 Ваша корзина",
+            noteLabel: "📝 Примечание для кухни:",
+            notePlaceholder: "Например: Пиво холодное, стакан со льдом",
+            totalAmount: "Итоговая сумма:",
+            confirmOrder: "Подтвердить заказ 🚀",
+            close: "Закрыть",
+            orderNo: "Заказ №",
+            statusLabel: "Статус:",
+            pending: "В ожидании",
+            emptyCartAlert: "Ваша корзина пуста!",
+            callConfirmWaiter: "Вызов официанта 🔔 - Подтверждаете?",
+            callConfirmBill: "Запрос счета 💳 - Подтверждаете?",
+            waiterActionText: "Вызов официанта 🔔",
+            billActionText: "Запрос счета 💳",
+            errAlert: "Произошла ошибка."
+        },
+        en: {
+            table: "📍 Table №",
+            callWaiterBtn: "🔔 Call Waiter",
+            getBillBtn: "💳 Request Bill",
+            searchPlaceholder: "🔍 Search menu...",
+            amount: "Total:",
+            itemsCount: "item(s)",
+            viewCart: "View Cart 🛒",
+            cartTitle: "🛒 Your Cart",
+            noteLabel: "📝 Note for kitchen:",
+            notePlaceholder: "e.g. Cold beer, glass with ice",
+            totalAmount: "Total Amount:",
+            confirmOrder: "Confirm Order 🚀",
+            close: "Close",
+            orderNo: "Order №",
+            statusLabel: "Status:",
+            pending: "Pending",
+            emptyCartAlert: "Your cart is empty!",
+            callConfirmWaiter: "Call Waiter 🔔 - Are you sure?",
+            callConfirmBill: "Request Bill 💳 - Are you sure?",
+            waiterActionText: "Call Waiter 🔔",
+            billActionText: "Request Bill 💳",
+            errAlert: "An error occurred."
+        }
+    };
+
+    let currentLang = localStorage.getItem('qrenki_lang') || 'az';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('qrenki_lang', lang);
+
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(`lang-${lang}`);
+        if (activeBtn) activeBtn.classList.add('active');
+
+        const t = translations[lang];
+
+        document.getElementById('lblTable').innerText = t.table;
+        document.getElementById('btnCallWaiter').innerText = t.callWaiterBtn;
+        document.getElementById('btnGetBill').innerText = t.getBillBtn;
+        document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        document.getElementById('lblAmount').innerText = t.amount;
+        document.getElementById('lblItems').innerText = t.itemsCount;
+        document.getElementById('btnCartOpen').innerText = t.viewCart;
+        document.getElementById('lblCartTitle').innerText = t.cartTitle;
+        document.getElementById('lblNote').innerText = t.noteLabel;
+        document.getElementById('orderNote').placeholder = t.notePlaceholder;
+        document.getElementById('lblTotal').innerText = t.totalAmount;
+        document.getElementById('btnConfirm').innerText = t.confirmOrder;
+        document.getElementById('btnCloseCart').innerText = t.close;
+        document.getElementById('lblOrderNo').innerText = t.orderNo;
+        document.getElementById('lblStatus').innerText = t.statusLabel;
+        document.getElementById('btnStatusClose').innerText = t.pending;
+
+        document.querySelectorAll('.item-title-text').forEach(el => {
+            const txt = el.getAttribute(`data-${lang}`);
+            if (txt) el.innerText = txt;
+        });
+
+        document.querySelectorAll('.option-label').forEach(el => {
+            const txt = el.getAttribute(`data-${lang}`);
+            if (txt) el.innerText = txt;
+        });
+
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            const catName = btn.getAttribute(`data-cat-${lang}`);
+            if (catName) btn.innerText = catName;
+        });
+
+        document.querySelectorAll('.category-title').forEach(title => {
+            const titleName = title.getAttribute(`data-title-${lang}`);
+            if (titleName) title.innerText = titleName;
+        });
+
+        filterMenu();
+        if (document.getElementById('cartModal').style.display === 'block') {
+            renderCartModal();
+        }
+    }
+
+    function getItemById(id) {
+        for (let cat in MENU_DATA) {
+            let found = MENU_DATA[cat].find(i => String(i.id) === String(id));
+            if (found) return found;
+        }
+        return null;
+    }
+
+    function getLocalizedString(val, lang = currentLang) {
+        if (typeof val === 'object' && val !== null) {
+            return val[lang] || val['az'] || '';
+        }
+        return String(val || '');
+    }
+
+    let cart = {};
+    const tableNumber = "{{ table_number }}";
+    let currentPlacedOrderId = localStorage.getItem('last_order_id') || null;
+
+    function callWaiter(typeKey) {
+        const t = translations[currentLang];
+        const confirmMsg = typeKey === 'waiter' ? t.callConfirmWaiter : t.callConfirmBill;
+        const actionText = typeKey === 'waiter' ? t.waiterActionText : t.billActionText;
+
+        if (confirm(confirmMsg)) {
+            fetch('/api/call-waiter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    table_number: tableNumber,
+                    request_type: actionText
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // NFC xətası və ya uğurlu bildiriş olduqda mesajı gösterir
+                alert(data.message);
+            })
+            .catch(err => {
+                alert(t.errAlert);
+            });
+        }
+    }
+
+    let isClickScrolling = false;
+
+    function scrollToCategory(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            isClickScrolling = true;
+
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            const activeBtn = document.querySelector(`.cat-btn[data-cat-id="${id}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
+
+            el.scrollIntoView({ behavior: 'smooth' });
+
+            setTimeout(() => { isClickScrolling = false; }, 800);
+        }
+    }
+
+    function setupScrollSpy() {
+        const container = (window.innerWidth >= 768) ? document.getElementById('scrollContainer') : window;
+        const catTitles = document.querySelectorAll('.category-title');
+        const catBtns = document.querySelectorAll('.cat-btn');
+
+        function onScroll() {
+            if (isClickScrolling) return;
+
+            let currentId = "";
+            catTitles.forEach(title => {
+                const rect = title.getBoundingClientRect();
+                if (rect.top <= 280) {
+                    currentId = title.id;
+                }
+            });
+
+            if (currentId) {
+                catBtns.forEach(btn => {
+                    if (btn.getAttribute('data-cat-id') === currentId) {
+                        if (!btn.classList.contains('active')) {
+                            catBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                        }
+                    }
+                });
+            }
+        }
+
+        container.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    function filterMenu() {
+        let input = document.getElementById('searchInput').value.toLowerCase().trim();
+        let blocks = document.querySelectorAll('.category-block');
+
+        blocks.forEach(block => {
+            let items = block.querySelectorAll('.menu-item');
+            let hasVisibleItem = false;
+
+            items.forEach(item => {
+                let name = item.getAttribute(`data-name-${currentLang}`) || '';
+                if (name.includes(input)) {
+                    item.style.display = 'flex';
+                    hasVisibleItem = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            block.style.display = hasVisibleItem ? 'block' : 'none';
+        });
+    }
+
+    function changeQuantitySimple(key, itemId, price, delta) {
+        if (!cart[key]) {
+            cart[key] = { itemId: itemId, price: price, quantity: 0, optionIndex: null };
+        }
+        cart[key].quantity += delta;
+        if (cart[key].quantity <= 0) {
+            delete cart[key];
+        }
+        updateUI();
+    }
+
+    function changeQuantityOption(key, itemId, optionIndex, price, delta) {
+        if (!cart[key]) {
+            cart[key] = { itemId: itemId, price: price, quantity: 0, optionIndex: optionIndex };
+        }
+        cart[key].quantity += delta;
+        if (cart[key].quantity <= 0) {
+            delete cart[key];
+        }
+        updateUI();
+    }
+
+    function updateUI() {
+        let total = 0;
+        let count = 0;
+        document.querySelectorAll('.qty-num').forEach(el => el.innerText = '0');
+
+        for (let key in cart) {
+            let item = cart[key];
+            total += item.price * item.quantity;
+            count += item.quantity;
+            let qtyEl = document.getElementById('qty-' + key);
+            if (qtyEl) qtyEl.innerText = item.quantity;
+        }
+
+        document.getElementById('total-price').innerText = total.toFixed(2) + ' ₼';
+        document.getElementById('cart-count').innerText = count;
+    }
+
+    function openCart() {
+        const t = translations[currentLang];
+        if (Object.keys(cart).length === 0) {
+            alert(t.emptyCartAlert);
+            return;
+        }
+        renderCartModal();
+        document.getElementById('cartModal').style.display = 'block';
+    }
+
+    function closeCart() {
+        document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function renderCartModal() {
+        const container = document.getElementById('cart-items-list');
+        let currentNote = document.getElementById('orderNote') ? document.getElementById('orderNote').value : '';
+        
+        container.innerHTML = '';
+        let total = 0;
+
+        for (let key in cart) {
+            let cartObj = cart[key];
+            let itemData = getItemById(cartObj.itemId);
+            if (!itemData) continue;
+
+            let titleStr = getLocalizedString(itemData.adı, currentLang);
+            if (cartObj.optionIndex !== null && itemData.options && itemData.options[cartObj.optionIndex]) {
+                let optLabel = getLocalizedString(itemData.options[cartObj.optionIndex].label, currentLang);
+                titleStr += ` (${optLabel})`;
+            }
+
+            total += cartObj.price * cartObj.quantity;
+
+            container.innerHTML += `
+                <div class="cart-item">
+                    <div>
+                        <strong style="font-size:14px; color:#fff;">${titleStr}</strong><br>
+                        <small style="color:#20e070; font-weight:700;">${cartObj.price.toFixed(2)} ₼ × ${cartObj.quantity}</small>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <button class="btn-qty" onclick="handleModalQtyChange('${key}', -1)">-</button>
+                        <span style="font-weight:700;">${cartObj.quantity}</span>
+                        <button class="btn-qty" onclick="handleModalQtyChange('${key}', 1)">+</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        if (Object.keys(cart).length === 0) {
+            closeCart();
+        } else {
+            document.getElementById('modal-total-price').innerText = total.toFixed(2);
+            if (document.getElementById('orderNote')) {
+                document.getElementById('orderNote').value = currentNote;
+            }
+        }
+    }
+
+    function handleModalQtyChange(key, delta) {
+        if (!cart[key]) return;
+        let cartObj = cart[key];
+        if (cartObj.optionIndex !== null) {
+            changeQuantityOption(key, cartObj.itemId, cartObj.optionIndex, cartObj.price, delta);
+        } else {
+            changeQuantitySimple(key, cartObj.itemId, cartObj.price, delta);
+        }
+        renderCartModal();
+    }
+
+    function confirmOrder() {
+        const t = translations[currentLang];
+        let itemsFormatted = [];
+        let total = 0;
+        let noteEl = document.getElementById('orderNote');
+        let note = noteEl ? noteEl.value.trim() : "";
+
+        for (let key in cart) {
+            let cartObj = cart[key];
+            let itemData = getItemById(cartObj.itemId);
+            if (!itemData) continue;
+
+            let nameStr = getLocalizedString(itemData.adı, currentLang);
+            if (cartObj.optionIndex !== null && itemData.options && itemData.options[cartObj.optionIndex]) {
+                let optLabel = getLocalizedString(itemData.options[cartObj.optionIndex].label, currentLang);
+                nameStr += ` (${optLabel})`;
+            }
+
+            total += cartObj.price * cartObj.quantity;
+            for (let i = 0; i < cartObj.quantity; i++) {
+                itemsFormatted.push({ 
+                    itemId: cartObj.itemId,
+                    optionIndex: cartObj.optionIndex,
+                    name: nameStr, 
+                    price: cartObj.price 
+                });
+            }
+        }
+
+        fetch('/api/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                table_number: tableNumber,
+                items: itemsFormatted,
+                total_price: total.toFixed(2),
+                note: note
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            
+            // Xəta olduqda (NFC oxutmayıbsa) səbət təmizlənməsin
+            if (data.status === "error") {
+                return;
+            }
+
+            cart = {};
+            if (noteEl) noteEl.value = '';
+            updateUI();
+            closeCart();
+
+            if (data.order_id) {
+                onOrderPlacedSuccess(data.order_id);
+            }
+        })
+        .catch(err => {
+            alert(t.errAlert);
+        });
+    }
+
+    function onOrderPlacedSuccess(orderId) {
+        currentPlacedOrderId = orderId;
+        localStorage.setItem('last_order_id', orderId);
+        showStatusBar();
+        startOrderStatusTracking();
+    }
+
+    function showStatusBar() {
+        const bar = document.getElementById('liveStatusBar');
+        if (bar) bar.style.display = 'flex';
+    }
+
+    function hideStatusBar() {
+        const bar = document.getElementById('liveStatusBar');
+        if (bar) bar.style.display = 'none';
+    }
+
+    function trackOrderStatus() {
+        if (!currentPlacedOrderId) return;
+
+        fetch('/api/orders')
+            .then(res => res.json())
+            .then(orders => {
+                const myOrder = orders.find(o => String(o.id) === String(currentPlacedOrderId));
+                if (myOrder) {
+                    document.getElementById('activeOrderId').innerText = myOrder.id;
+                    document.getElementById('activeOrderStatus').innerText = myOrder.status;
+
+                    if (myOrder.status.includes('Ödənildi')) {
+                        setTimeout(() => {
+                            hideStatusBar();
+                            localStorage.removeItem('last_order_id');
+                            currentPlacedOrderId = null;
+                        }, 4000);
+                    }
+                }
+            })
+            .catch(err => console.log(err));
+    }
+
+    function startOrderStatusTracking() {
+        trackOrderStatus();
+        setInterval(trackOrderStatus, 3000);
+    }
+
+    setLanguage(currentLang);
+    setupScrollSpy();
+
+    if (currentPlacedOrderId) {
+        showStatusBar();
+        startOrderStatusTracking();
+    }
+</script>
+</body>
+</html>
